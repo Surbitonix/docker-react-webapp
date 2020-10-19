@@ -7,4 +7,16 @@ before_install:
   - docker build -t surbitonix97/docker-react-webapp -f Dockerfile.dev .
 
 script:
-  - docker run -e CI=true surbitonix97/docker-react-webapp npm run test
+  - docker run -e CI=true surbitonix97/docker-react-webapp npm run test -- --coverage
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-2'
+  app: 'docker-react'
+  env: 'DockerReact-env'
+  bucket_name: 'elasticbeanstalk-us-east-2-589205736705'
+  bucket_path: 'docker-react'
+  on:
+    branch: master
+    access_key_id: $sws_access_key
+    secret_access_key: $aws_secret_access_key
